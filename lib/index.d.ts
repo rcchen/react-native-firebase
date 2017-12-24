@@ -18,6 +18,7 @@ declare module "react-native-firebase" {
     analytics(): RNFirebase.Analytics;
 
     on(type: string, handler: (msg: any) => void): any;
+    onReady(): Promise<FireBase>;
 
     database: {
       (): RNFirebase.database.Database
@@ -63,6 +64,11 @@ declare module "react-native-firebase" {
      * such as a pre-caught exception this is possible by using the report method.
      */
     crash(): RNFirebase.crash.Crash;
+
+    /**
+     * Firestore.
+     */
+    firestore(): RNFirebase.firestore.Firestore;
 
     apps: Array<string>;
     googleApiAvailability: RNFirebase.GoogleApiAvailabilityType;
@@ -844,6 +850,25 @@ declare module "react-native-firebase" {
         report(error: RnError, maxStackSize: Number): void
 
         [key: string]: any;
+      }
+    }
+
+    namespace firestore {
+      interface Firestore {
+        collection(collectionPath: string): CollectionReference;
+        doc(documentPath: string): DocumentReference;
+      }
+
+      interface CollectionReference {
+        doc(documentPath: string): DocumentReference;
+        id(): string | null;
+        set(data: Object, writeOptions?: FirestoreWriteOptions): Promise<void>;
+        where(field: string, operator: string, value: any): CollectionReference;
+        get(): any;
+      }
+
+      interface FirestoreWriteOptions {
+        merge?: boolean;
       }
     }
   }
